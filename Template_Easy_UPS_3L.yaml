@@ -1,0 +1,1201 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: 3dcd5bbe90534f9e8eb5c2d53756af63
+      name: Templates/Power
+  templates:
+    - uuid: 6385e4ae5bb6498a8f98da28179be424
+      template: 'Easy UPS 3L 500kVA'
+      name: 'Easy UPS 3L 500kVA'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: 030d74bb776b4f69813c889b048e2323
+          name: 'UPS: Alerta de cortocircuito en la salida de la UPS'
+          type: SNMP_TRAP
+          key: 'snmptrap["apcOutputShortCircuit"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 492feea3ca7944e3a8afdf84c6d42189
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["apcOutputShortCircuit"])<>"\"\""'
+              name: 'CORTOCIRCUITO EN LA SALIDA DE LA UPS (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 564f06e1e63d4295a3bc520537b3a6d4
+          name: 'UPS: Alerta de cortocircuito en la salida de la UPS resuelta'
+          type: SNMP_TRAP
+          key: 'snmptrap["apcOutputShortCircuitCleared"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 52ae045f630042a6abcabb4e6b164b5d
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["apcOutputShortCircuitCleared"])<>"\"\""'
+              name: 'CORTOCIRCUITO EN LA SALIDA DE LA UPS RESUELTO (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 5b50db42ba694ed6b6d9cc09b87b6575
+          name: 'UPS: Alerta de falla de ventilador'
+          type: SNMP_TRAP
+          key: 'snmptrap["baseFanFailure"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 676085012e1545f59527414597baa66b
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["baseFanFailure"])<>"\"\""'
+              name: 'FALLA DE VENTILADOR DE UPS (RECONOCER)'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 3fcbe07264af4bc7a7a55a340f257199
+          name: 'UPS: Alerta de falla de ventilador resuelta'
+          type: SNMP_TRAP
+          key: 'snmptrap["baseFanFailureCleared"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 97e2d86a37fb45b29db1eaf695957f65
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["baseFanFailureCleared"])<>"\"\""'
+              name: 'FALLA DE VENTILADOR DE UPS RESUELTA (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 58dd2df76c0648b888603f0cb92b4d65
+          name: 'UPS: Alerta de apagado de emergencia activado'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsEPOActive"]'
+          value_type: TEXT
+          triggers:
+            - uuid: b7a55de5cc1a4e61a82862f047725538
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsEPOActive"])<>"\"\""'
+              name: 'APAGADO DE EMERGENCIA MANUAL ACTIVADO (RECONOCER)'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: e10d5e0e15cf40dcb8e9ca087f5f5e72
+          name: 'UPS: Alerta de apagado de emergencia activado resuelta'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsEPOActiveCleared"]'
+          value_type: TEXT
+          triggers:
+            - uuid: a305d22d01a9451a804515f9597bfdd9
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsEPOActiveCleared"])<>"\"\""'
+              name: 'APAGADO DE EMERGENCIA MANUAL ACTIVADO RESUELTO (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 3ea0d4db9a5e4f69a1829891120e0ba6
+          name: 'UPS: Alerta de falla de inversor'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsInverterFault"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 20c585e25895486d83f12e26fd143c7a
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsInverterFault"])<>"\"\""'
+              name: 'FALLA DE INVERSOR (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: cd150524702344f6a87d4069ca518d35
+          name: 'UPS: Alerta de falla de inversor resuelta'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsInverterFaultCleared"]'
+          value_type: TEXT
+          triggers:
+            - uuid: a132fc9b230744d0bf0496924a9e7e67
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsInverterFaultCleared"])<>"\"\""'
+              name: 'FALLA DE INVERSOR RESUELTA (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 92dfcacd687d4721b990223371e809b1
+          name: 'UPS: Alerta de falla de rectificador PFC'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsPfcFault"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 927670054931479b856f02eb53b8bce7
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsPfcFault"])<>"\"\""'
+              name: 'FALLA DE RECTIFICADOR PFC (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 77e30a3b8a544744a8f473dad10d3c6d
+          name: 'UPS: Alerta de falla de rectificador PFC resuelta'
+          type: SNMP_TRAP
+          key: 'snmptrap["upsPfcFaultCleared"]'
+          value_type: TEXT
+          triggers:
+            - uuid: 1971f2f555fd4ae7ad494349d617b58f
+              expression: 'last(/Easy UPS 3L 500kVA/snmptrap["upsPfcFaultCleared"])<>"\"\""'
+              name: 'FALLA DE RECTIFICADOR PFC RESUELTA (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 58700457496f44b4ab5711655ab2f2f9
+          name: 'Batería: Corriente del bus DC en terminal negativo'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.8.1.3.2]'
+          key: 'ups.battery.current.terminal[negative]'
+          units: A
+        - uuid: 931fe9af9aaf4757a7d5989b543f371d
+          name: 'Batería: Corriente del bus DC en terminal positivo'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.8.1.3.1]'
+          key: 'ups.battery.current.terminal[positive]'
+          units: A
+        - uuid: d6aeac0e6efc4f2590d474de84301a21
+          name: 'Batería: Tensión del bus DC en terminal negativo'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.7.1.3.2]'
+          key: 'ups.battery.voltage.terminal[negative]'
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: ccee5c76a71d4cfe8c3db5f8d6797cd7
+          name: 'Batería: Tensión del bus DC en terminal positivo'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.7.1.3.1]'
+          key: 'ups.battery.voltage.terminal[positive]'
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: ea93b2e269be4a8095df688ed243ff11
+          name: 'UPS: Firmware'
+          type: DEPENDENT
+          key: ups.firmware
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsFirmware'
+          master_item:
+            key: ups.walk.upsIdent
+        - uuid: e7ac12b017e748e7862c447f7ca778f6
+          name: 'UPS: Frecuencia de entrada bypass'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.2.1.4.2]'
+          key: ups.get.phases.input.bypass.frequency
+          value_type: FLOAT
+          trends: '0'
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: d5ad406dfa234e888015e306fe6d93a3
+          name: 'UPS: Frecuencia de entrada principal'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.2.1.4.1]'
+          key: ups.get.phases.input.main.frequency
+          value_type: FLOAT
+          trends: '0'
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: ec9e7168f2524fdf916341433b3e92c1
+          name: 'UPS: Frecuencia de salida'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.2.1.4.1]'
+          key: ups.get.phases.ouput.frequency
+          trends: '0'
+          units: Hz
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 407812c11ae040b9800ee2682b131d4a
+          name: 'Bateria: Capacidad restante'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.1.0]'
+          key: ups.get.upsBatteryCapacityRemaining
+          value_type: FLOAT
+          trends: '0'
+          units: '%'
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: d8865320e6a14a679d81035e0abaf22d
+          name: 'Bateria: Estado'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.1.1.0]'
+          key: ups.get.upsBatteryStatus
+          trends: '0'
+          valuemap:
+            name: 'Estado de bateria'
+          triggers:
+            - uuid: b03d249a393143b2bc4a60dbb85365db
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsBatteryStatus)=5'
+              name: 'BATERIA AUSENTE'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: e3b9fe077d1344d688729be14d3e1cbc
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsBatteryStatus)=3'
+              name: 'BATERIA BAJA'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: b8add5680a55447290aee44ce991a9a2
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsBatteryStatus)=1'
+              name: 'BATERIA EN ESTADO DESCONOCIDO'
+              priority: WARNING
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: f1908853f714491d90ccfe0e4e54834f
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsBatteryStatus)=4'
+              name: 'BATERIA EN FALLA'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: df0f7f95eb464bf7b199ab37d719f71f
+          name: 'Bateria: Tiempo en bateria'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.1.2.0]'
+          key: ups.get.upsBatteryTimeOn
+          trends: '0'
+          units: s
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+        - uuid: ea1669f771fd4a15a9f2f3012645c042
+          name: 'Bateria: Tiempo restante'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.2.3.0]'
+          key: ups.get.upsBatteryTimeRemaining
+          trends: '0'
+          units: s
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+        - uuid: 721277997ce242df8683555c7b2eef8a
+          name: 'UPS: Estado en binario'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.11.1.1.0]'
+          key: ups.get.upsBinaryStatus
+          delay: 5m
+          value_type: TEXT
+        - uuid: df0a3e7ad4024c7b981cf434cc83a4cb
+          name: 'UPS: Estado de comunicacion'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.8.1.0]'
+          key: ups.get.upsCommunicationStatus
+          delay: 10m
+          trends: '0'
+          valuemap:
+            name: 'Estado de comunicacion'
+          triggers:
+            - uuid: 974caa9f219d480db808946c33b63223
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsCommunicationStatus)=2'
+              name: 'UPS SIN COMUNICACION CON TARJETA DE RED'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: e06ad97fdc8940c28bcaf9d64e8122bd
+          name: 'UPS: Temperatura interna'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.13.0]'
+          key: ups.get.upsInternalTemperature
+          value_type: FLOAT
+          trends: '0'
+          units: C°
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 4332e55768d84802ab5a4153a7cb0a8f
+          name: 'Temperatura ambiente'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.13.11.1.0]'
+          key: ups.get.upsRoomTemperature
+          delay: 5m
+          value_type: FLOAT
+          trends: '0'
+          units: C°
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: c98efbdc52b747969ff8bdf7b68ca38a
+          name: 'UPS: Estado'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.4.1.1.0]'
+          key: ups.get.upsStatus
+          trends: '0'
+          valuemap:
+            name: 'Estado de UPS'
+          triggers:
+            - uuid: 66eef0c44a074eefbd1ac76e5296d1de
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=9'
+              name: 'BYPASS CONMUTADO'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: fa43d33067c1462889de2432f8e49d83
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=16'
+              name: 'BYPASS ESTATICO DE EMERGENCIA'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 3ac21e07da3344e5b081ff19e109157c
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=17'
+              name: 'BYPASS ESTATICO EN ESPERA'
+              priority: AVERAGE
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: f1a43cfeb4bd4a2789c8e45a595fb3f4
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=6'
+              name: 'BYPASS POR SOFTWARE'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: a1259868823c4ec4ba25f67f7848d5f1
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=10'
+              name: 'EN BYPASS POR FALLA DE HARDWARE'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 3dcd205003ca4ad89dd28de208fd234c
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=28'
+              name: 'HACIENDO AUTODIAGNOSTICO'
+              priority: INFO
+            - uuid: bb09b8826ad5477080b8dac5a7209868
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=15'
+              name: 'HACIENDO PRUEBA DE BATERIA'
+              priority: INFO
+            - uuid: 5c032e9f8f4a415f958a8cebc03905ed
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=27'
+              name: 'RESERVA DE ENERGIA DISTRIBUIDA'
+              priority: AVERAGE
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 421c55c62fe34293baa975b5479513fd
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=7'
+              name: 'UPS APAGADA'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 4e1f534165184527a59d8c1bd46d0a18
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=3'
+              name: 'UPS EN BATERIA'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 8f4d74c111304c868ea48e1c075144d0
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=13'
+              name: 'UPS EN MODO ECO'
+              priority: INFO
+            - uuid: e308edbb589a4753af5a084bcf521de3
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=20'
+              name: 'UPS EN MODO ECONVERSION'
+              priority: INFO
+            - uuid: 7b5a58d397624b40b1ec58f282134618
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=8'
+              name: 'UPS EN REINICIO'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 569b4fda138145b1a50183a40850c51f
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=11'
+              name: 'UPS EN REPOSO HASTA RETORNO DE ENERGIA'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 016130226d974f549a792a60229b24b6
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=5'
+              name: 'UPS EN REPOSO TEMPORIZADO'
+              priority: WARNING
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 0b66531b8e074699856a29db9503aef3
+              expression: 'last(/Easy UPS 3L 500kVA/ups.get.upsStatus)=26'
+              name: 'UPS SIN INVERSOR'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 28d299341eca4a9192f4f6737ba0c616
+          name: 'Mantenimiento: Tiempo transcurrido de garantía (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.elapsed.warranty
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoTranscurridoGarantia'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 576b3def4eb54c7ca05691c4c165e503
+          name: 'Mantenimiento: Intervalo de filtro de aire (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.air.filter
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloMantenimientoFiltroAire'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: a9800b3a59bf4e9a9bfc42eb316512f4
+          name: 'Mantenimiento: Intervalo de fuente auxiliar (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.aux.source
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloMantenimientoFuenteAuxiliar'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 267c071f18354918b9810a60933969e3
+          name: 'Mantenimiento: Intervalo de batería (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.battery
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloMantenimientoBateria'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 8583328112ae4843bc8460d73137fe47
+          name: 'Mantenimiento: Intervalo de capacitor AC (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.capacitor.ac
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloMantenimientoCapacitorAC'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 8b7086c0c5d24c9d9b9c4f6b3b362ca9
+          name: 'Mantenimiento: Intervalo de capacitor DC (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.capacitor.dc
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloMantenimientoCapacitorDC'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 699a8f0fb7c74f589a3aaf925b2744fb
+          name: 'Mantenimiento: Intervalo de garantía (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.interval.warranty
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsIntervaloGarantia'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: d4b1fa8724254f51993dcbb6f3db7652
+          name: 'Mantenimiento: Tiempo desde último mantenimiento de filtro de aire (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.lasttime.air.filter
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoDesdeMantenimientoFiltroAire'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: bbbd7400f2054beeaa1248d998e56984
+          name: 'Mantenimiento: Tiempo desde último mantenimiento de fuente auxiliar (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.lasttime.aux.source
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoDesdeMantenimientoFuenteAuxiliar'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: a3f55aa45c4649659db089169cdfef02
+          name: 'Mantenimiento: Tiempo desde último mantenimiento de batería (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.lasttime.battery
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoDesdeMantenimientoBateria'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 17e25911b98f4910947cbad152f50c39
+          name: 'Mantenimiento: Tiempo desde último mantenimiento de capacitor AC (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.lasttime.capacitor.ac
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoDesdeMantenimientoCapacitorAC'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: 19d7de4359be4cd6b92f2334a38b73dc
+          name: 'Mantenimiento: Tiempo desde último mantenimiento de capacitor DC (dias)'
+          type: DEPENDENT
+          key: ups.maintenance.lasttime.capacitor.dc
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsTiempoDesdeMantenimientoCapacitorDC'
+          master_item:
+            key: ups.walk.upsMaintenance
+        - uuid: ed66e977074440998f3953c920eb4a07
+          name: 'UPS: Modelo'
+          type: DEPENDENT
+          key: ups.model
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsModelo'
+          master_item:
+            key: ups.walk.upsIdent
+        - uuid: a865139fdffa48409338a04ade6c5b32
+          name: 'UPS: Numero de parte'
+          type: DEPENDENT
+          key: ups.partNumber
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsSKU'
+          master_item:
+            key: ups.walk.upsIdent
+        - uuid: a460783601ec4e5897ffb47f37072398
+          name: 'UPS: Corriente de entrada bypass en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.2.1.1]'
+          key: 'ups.phases.input.bypass.current[L1]'
+          value_type: FLOAT
+          status: DISABLED
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 6c7697e110014845920f0fea99141a4d
+          name: 'UPS: Corriente de entrada bypass en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.2.1.2]'
+          key: 'ups.phases.input.bypass.current[L2]'
+          value_type: FLOAT
+          status: DISABLED
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 411fd2398dcf4e75ae6f7bed9249bdf8
+          name: 'UPS: Corriente de entrada bypass en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.2.1.3]'
+          key: 'ups.phases.input.bypass.current[L3]'
+          value_type: FLOAT
+          status: DISABLED
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: b3715708a3bf4a56a4d5d19e67daa575
+          name: 'UPS: Tensión de entrada bypass entre líneas L1 y L2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.2.1.1]'
+          key: 'ups.phases.input.bypass.voltage[L1L2]'
+          units: V
+        - uuid: 3503570c3a3f47f7a30b45e8dc9d1a67
+          name: 'UPS: Tensión de entrada bypass entre fase 1 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.2.1.1]'
+          key: 'ups.phases.input.bypass.voltage[L1N]'
+          units: V
+        - uuid: b616be8aa1344beaa89370e11d433e7d
+          name: 'UPS: Tensión de entrada bypass entre líneas L2 y L3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.2.1.2]'
+          key: 'ups.phases.input.bypass.voltage[L2L3]'
+          units: V
+        - uuid: 16c0ee564b1b417b9b482318a4f7f705
+          name: 'UPS: Tensión de entrada bypass entre fase 2 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.2.1.2]'
+          key: 'ups.phases.input.bypass.voltage[L2N]'
+          units: V
+        - uuid: 8be54c48167a4c61b4a6e0d53e33c823
+          name: 'UPS: Tensión de entrada bypass entre líneas L3 y L1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.2.1.3]'
+          key: 'ups.phases.input.bypass.voltage[L3L1]'
+          units: V
+        - uuid: 9f1ba383fa2b462da32ddc2e1fd8077e
+          name: 'UPS: Tensión de entrada bypass entre fase 3 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.2.1.3]'
+          key: 'ups.phases.input.bypass.voltage[L3N]'
+          units: V
+        - uuid: b76c09319fbc4c698439a380bca1c818
+          name: 'UPS: Corriente de entrada principal en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.1.1.1]'
+          key: 'ups.phases.input.main.current[L1]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 8196cb90eca046f1a831aab579b2091d
+          name: 'UPS: Corriente de entrada principal en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.1.1.2]'
+          key: 'ups.phases.input.main.current[L2]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: f0b338196583459da4b52616920cbe74
+          name: 'UPS: Corriente de entrada principal en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.1.1.3]'
+          key: 'ups.phases.input.main.current[L3]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 9a596bf93f12466e9dd7479f38720bf2
+          name: 'UPS: Tensión de entrada principal entre líneas L1 y L2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.1.1.1]'
+          key: 'ups.phases.input.main.voltage[L1L2]'
+          units: V
+        - uuid: 60f49504d21f4c6c966f5cba61d93e4e
+          name: 'UPS: Tensión de entrada principal entre fase 1 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.1.1.1]'
+          key: 'ups.phases.input.main.voltage[L1N]'
+          units: V
+        - uuid: 507051dfb5ef4837819127c1d40ad48a
+          name: 'UPS: Tensión de entrada principal entre líneas L2 y L3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.1.1.2]'
+          key: 'ups.phases.input.main.voltage[L2L3]'
+          units: V
+        - uuid: e8219aab5c5b49b6b167b381defb3c10
+          name: 'UPS: Tensión de entrada principal entre fase 2 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.1.1.2]'
+          key: 'ups.phases.input.main.voltage[L2N]'
+          units: V
+        - uuid: 7812cc6cc25b483f9e0c0834c69528ad
+          name: 'UPS: Tensión de entrada principal entre líneas L3 y L1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.1.1.3]'
+          key: 'ups.phases.input.main.voltage[L3L1]'
+          units: V
+        - uuid: 696797a5040d49c0a2529abdf6be1c0b
+          name: 'UPS: Tensión de entrada principal entre fase 3 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.1.1.3]'
+          key: 'ups.phases.input.main.voltage[L3N]'
+          units: V
+        - uuid: 466004331a73462084949a9d489024e0
+          name: 'UPS: Corriente de salida en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.4.1.1.1]'
+          key: 'ups.phases.output.current[L1]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: b92b08a4e46b4f11abcd0fda31070b5b
+          name: 'UPS: Corriente de salida en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.4.1.1.2]'
+          key: 'ups.phases.output.current[L2]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: a073e07c62244e4fbe81a3c7cb90418a
+          name: 'UPS: Corriente de salida en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.4.1.1.3]'
+          key: 'ups.phases.output.current[L3]'
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+        - uuid: 37a1268d1e2d461685069244752597ab
+          name: 'UPS: Porcentaje de carga de salida en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.10.1.1.1]'
+          key: 'ups.phases.output.load.percentage[L1]'
+          units: '%'
+        - uuid: 349267d408b742f7bb5a9fea92cf0e41
+          name: 'UPS: Porcentaje de carga de salida en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.10.1.1.2]'
+          key: 'ups.phases.output.load.percentage[L2]'
+          units: '%'
+        - uuid: 53e32a0a85e54eaf8866c0151435aaa0
+          name: 'UPS: Porcentaje de carga de salida en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.10.1.1.3]'
+          key: 'ups.phases.output.load.percentage[L3]'
+          units: '%'
+        - uuid: a9abc63844754631856716051d8f5d90
+          name: 'UPS: Carga de salida en VA en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.7.1.1.1]'
+          key: 'ups.phases.output.load[L1]'
+          units: VA
+        - uuid: 47777b05c7574964840ea05841d16b33
+          name: 'UPS: Carga de salida en VA en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.7.1.1.2]'
+          key: 'ups.phases.output.load[L2]'
+          units: VA
+        - uuid: 7763c855d7ce4fc7bd21e560aefe8a5b
+          name: 'UPS: Carga de salida en VA en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.7.1.1.3]'
+          key: 'ups.phases.output.load[L3]'
+          units: VA
+        - uuid: be84a68d6a7f4a43a4cc236e26baeb25
+          name: 'UPS: Porcentaje de potencia activa de salida en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.16.1.1.1]'
+          key: 'ups.phases.output.power.percentage[L1]'
+          units: '%'
+        - uuid: fdcc8390af3c40bda45afdc55fdc840c
+          name: 'UPS: Porcentaje de potencia activa de salida en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.16.1.1.2]'
+          key: 'ups.phases.output.power.percentage[L2]'
+          units: '%'
+        - uuid: 5cee3dea9b9e48d4992cfe2fd17299f2
+          name: 'UPS: Porcentaje de potencia activa de salida en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.16.1.1.3]'
+          key: 'ups.phases.output.power.percentage[L3]'
+          units: '%'
+        - uuid: dcfa5874e3744e06bba6a78d5794984c
+          name: 'UPS: Factor de potencia en fase 1'
+          type: CALCULATED
+          key: 'ups.phases.output.powerFactor[L1]'
+          value_type: FLOAT
+          params: 'last(//ups.phases.output.power[L1]) / last(//ups.phases.output.load[L1])'
+        - uuid: 342615aa1b9243799f1f8c46ddf9fb44
+          name: 'UPS: Factor de potencia en fase 2'
+          type: CALCULATED
+          key: 'ups.phases.output.powerFactor[L2]'
+          value_type: FLOAT
+          params: 'last(//ups.phases.output.power[L2]) / last(//ups.phases.output.load[L2])'
+        - uuid: 21ddb3a3085b4bc4be950eccab8684b8
+          name: 'UPS: Factor de potencia en fase 3'
+          type: CALCULATED
+          key: 'ups.phases.output.powerFactor[L3]'
+          value_type: FLOAT
+          params: 'last(//ups.phases.output.power[L3]) / last(//ups.phases.output.load[L3])'
+        - uuid: 1dfa7a806d294c409c5a24062256cf95
+          name: 'UPS: Potencia activa de salida en fase 1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.13.1.1.1]'
+          key: 'ups.phases.output.power[L1]'
+          units: W
+        - uuid: 5ddc32e9e24d48ac89c0df44a4c4854f
+          name: 'UPS: Potencia activa de salida en fase 2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.13.1.1.2]'
+          key: 'ups.phases.output.power[L2]'
+          units: W
+        - uuid: f07d8231dfd54428918fe142791b7071
+          name: 'UPS: Potencia activa de salida en fase 3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.13.1.1.3]'
+          key: 'ups.phases.output.power[L3]'
+          units: W
+        - uuid: 3502b618d99a42248c4625f41a1ae9e8
+          name: 'UPS: Tensión de salida entre líneas L1 y L2'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.3.1.1.1]'
+          key: 'ups.phases.output.voltage[L1L2]'
+          units: V
+        - uuid: bac828df9b2647058dcf3e64c25cfa6f
+          name: 'UPS: Tensión de salida entre fase 1 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.22.1.1.1]'
+          key: 'ups.phases.output.voltage[L1N]'
+          units: V
+        - uuid: 60dc7b9e4ae040aaa6c54321cba0076e
+          name: 'UPS: Tensión de salida entre líneas L2 y L3'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.3.1.1.2]'
+          key: 'ups.phases.output.voltage[L2L3]'
+          units: V
+        - uuid: 926796263b8f44cca7cb43845d8da99d
+          name: 'UPS: Tensión de salida entre fase 2 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.22.1.1.2]'
+          key: 'ups.phases.output.voltage[L2N]'
+          units: V
+        - uuid: 3556bba1d132454ab411db705ea188f3
+          name: 'UPS: Tensión de salida entre líneas L3 y L1'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.3.1.1.3]'
+          key: 'ups.phases.output.voltage[L3L1]'
+          units: V
+        - uuid: c36e280842be4e1a9d05912213c6ba2f
+          name: 'UPS: Tensión de salida entre fase 3 y neutro'
+          type: SNMP_AGENT
+          snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.22.1.1.3]'
+          key: 'ups.phases.output.voltage[L3N]'
+          units: V
+        - uuid: ca0578d5419641408ac8905b7dd1b84b
+          name: 'UPS: Numero de serie'
+          type: DEPENDENT
+          key: ups.serialNumber
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsNroSerie'
+          master_item:
+            key: ups.walk.upsIdent
+        - uuid: 5764b63a8114447598d660471bf8a158
+          name: 'UPS: Capacidad total'
+          type: DEPENDENT
+          key: ups.totalCapacity
+          trends: '0'
+          units: VA
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].upsCapacidad'
+          master_item:
+            key: ups.walk.upsIdent
+        - uuid: 056f3c60c4d74bd894929ee97f12a691
+          name: 'Identidad: bulk walk'
+          type: SNMP_AGENT
+          snmp_oid: 'walk[1.3.6.1.4.1.318.1.1.1.1]'
+          key: ups.walk.upsIdent
+          delay: '86400'
+          value_type: TEXT
+          preprocessing:
+            - type: SNMP_WALK_TO_JSON
+              parameters:
+                - upsModelo
+                - 1.3.6.1.4.1.318.1.1.1.1.1.1
+                - '0'
+                - upsFirmware
+                - 1.3.6.1.4.1.318.1.1.1.1.2.1
+                - '0'
+                - upsNroSerie
+                - 1.3.6.1.4.1.318.1.1.1.1.2.3
+                - '0'
+                - upsSKU
+                - 1.3.6.1.4.1.318.1.1.1.1.2.5
+                - '0'
+                - upsCapacidad
+                - 1.3.6.1.4.1.318.1.1.1.1.2.9
+                - '0'
+        - uuid: 15e54b9011da4ce4b59fefd7b9e6ec6a
+          name: 'Mantenimiento: bulk walk'
+          type: SNMP_AGENT
+          snmp_oid: 'walk[1.3.6.1.4.1.318.1.1.1.13]'
+          key: ups.walk.upsMaintenance
+          delay: 1d
+          value_type: TEXT
+          preprocessing:
+            - type: SNMP_WALK_TO_JSON
+              parameters:
+                - upsIntervaloMantenimientoCapacitorDC
+                - 1.3.6.1.4.1.318.1.1.1.13.12.1
+                - '0'
+                - upsTiempoDesdeMantenimientoCapacitorDC
+                - 1.3.6.1.4.1.318.1.1.1.13.12.2
+                - '0'
+                - upsIntervaloMantenimientoCapacitorAC
+                - 1.3.6.1.4.1.318.1.1.1.13.12.3
+                - '0'
+                - upsTiempoDesdeMantenimientoCapacitorAC
+                - 1.3.6.1.4.1.318.1.1.1.13.12.4
+                - '0'
+                - upsIntervaloMantenimientoBateria
+                - 1.3.6.1.4.1.318.1.1.1.13.12.5
+                - '0'
+                - upsTiempoDesdeMantenimientoBateria
+                - 1.3.6.1.4.1.318.1.1.1.13.12.6
+                - '0'
+                - upsIntervaloMantenimientoFuenteAuxiliar
+                - 1.3.6.1.4.1.318.1.1.1.13.12.7
+                - '0'
+                - upsTiempoDesdeMantenimientoFuenteAuxiliar
+                - 1.3.6.1.4.1.318.1.1.1.13.12.8
+                - '0'
+                - upsIntervaloMantenimientoFiltroAire
+                - 1.3.6.1.4.1.318.1.1.1.13.12.9
+                - '0'
+                - upsTiempoDesdeMantenimientoFiltroAire
+                - 1.3.6.1.4.1.318.1.1.1.13.12.10
+                - '0'
+                - upsIntervaloGarantia
+                - 1.3.6.1.4.1.318.1.1.1.13.12.11
+                - '0'
+                - upsTiempoTranscurridoGarantia
+                - 1.3.6.1.4.1.318.1.1.1.13.12.12
+                - '0'
+      discovery_rules:
+        - uuid: 9deabd9071da420781a31c8ac58428f3
+          name: 'Bateria metricas'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#POLARITY},1.3.6.1.4.1.318.1.1.1.2.3.7.1.2]'
+          key: ups.discovery.battery
+          delay: '86400'
+          status: DISABLED
+          item_prototypes:
+            - uuid: 3b01ef19207140a5958c5888c70da26f
+              name: 'upsBateriaCorrienteBusDCPolaridad{#POLARITY}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.8.1.3.{#SNMPINDEX}]'
+              key: 'ups.discovery.battery.current[{#POLARITY}]'
+              units: A
+            - uuid: f7423b712ddd407e9174c8fc747111e9
+              name: 'upsBateriaVoltajeBusDCPolaridad{#POLARITY}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.2.3.7.1.3.{#SNMPINDEX}]'
+              key: 'ups.discovery.battery.voltage[{#POLARITY}]'
+              value_type: FLOAT
+              units: V
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+        - uuid: 806d6f3ceb694087a9f7b82c3e827aa6
+          name: 'Fases metricas'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#PHASES},1.3.6.1.4.1.318.1.1.1.9.2.3.1.2.1.1]'
+          key: ups.discovery.phases
+          delay: '86400'
+          status: DISABLED
+          item_prototypes:
+            - uuid: f9323024dd8146eb8c077c58ebda91a5
+              name: 'upsInputBypassCorrienteL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.2.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.bypass.current[L{#SNMPINDEX}]'
+              value_type: FLOAT
+              units: A
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+            - uuid: c3f26cc89cbc4a19bfce455afb22fc4a
+              name: 'upsInputBypassVoltajeL{#PHASES}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.2.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.bypass.voltage[L{#PHASES}]'
+              units: V
+            - uuid: d30f135c0c3e46a089537b4cc40ae0ba
+              name: 'upsInputBypassVoltajeL{#SNMPINDEX}N'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.2.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.bypass.voltage[L{#SNMPINDEX}N]'
+              units: V
+            - uuid: bd9f9080c6114c10803328d4032eea2b
+              name: 'upsInputMainCorrienteL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.6.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.main.current[L{#SNMPINDEX}]'
+              value_type: FLOAT
+              units: A
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+            - uuid: d74bf647574347ab8fb992814b1fec0b
+              name: 'upsInputMainVoltajeL{#PHASES}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.3.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.main.voltage[L{#PHASES}]'
+              units: V
+            - uuid: c2c9b3a059b54f3f8954b0f9bcecfb4f
+              name: 'upsInputMainVoltajeL{#SNMPINDEX}N'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.2.3.1.14.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.input.main.voltage[L{#SNMPINDEX}N]'
+              units: V
+            - uuid: 5e9a00430a6c4d30b850ac48c9ede56f
+              name: 'upsOutputCorrienteL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.4.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.current[L{#SNMPINDEX}]'
+              value_type: FLOAT
+              units: A
+              preprocessing:
+                - type: MULTIPLIER
+                  parameters:
+                    - '0.1'
+            - uuid: d16ad7d894b34e3a99550d1a9a34c2e1
+              name: 'upsOutputCargaPorcentajeL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.10.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.load.percentage[L{#SNMPINDEX}]'
+              units: '%'
+            - uuid: ae1e0916697f44e9bc2b9d1b1d05a762
+              name: 'upsOutputCargaVAL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.7.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.load[L{#SNMPINDEX}]'
+              units: VA
+            - uuid: 0ac53f2b2add4a1c8a5128f695072233
+              name: 'upsOutputPotenciaPorcentajeL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.16.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.power.percentage[L{#SNMPINDEX}]'
+              units: '%'
+            - uuid: e0746692618e4db0837a916ad945e657
+              name: 'upsOutputPotenciaL{#SNMPINDEX}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.13.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.power[L{#SNMPINDEX}]'
+              units: W
+            - uuid: 823ad8915f0f498f894062afab31e9c6
+              name: 'upsOutputVoltajeL{#PHASES}'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.3.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.voltage[L{#PHASES}]'
+              units: V
+            - uuid: 358a651071834e3c8efd891c984f63fe
+              name: 'upsOutputVoltajeL{#SNMPINDEX}N'
+              type: SNMP_AGENT
+              snmp_oid: 'get[1.3.6.1.4.1.318.1.1.1.9.3.3.1.22.1.1.{#SNMPINDEX}]'
+              key: 'ups.discovery.phases.output.voltage[L{#SNMPINDEX}N]'
+              units: V
+      valuemaps:
+        - uuid: 40602aab558746319b7f8a0c32378453
+          name: 'Estado de bateria'
+          mappings:
+            - value: '1'
+              newvalue: DESCONOCIDO
+            - value: '2'
+              newvalue: NORMAL
+            - value: '3'
+              newvalue: BAJA
+            - value: '4'
+              newvalue: 'EN FALLA'
+            - value: '5'
+              newvalue: AUSENTE
+        - uuid: 8d5a59799adc427f978096894e0c3719
+          name: 'Estado de comunicacion'
+          mappings:
+            - value: '1'
+              newvalue: OK
+            - value: '2'
+              newvalue: 'SIN COMUNICACION'
+        - uuid: a9ef94f235f4485da955d9ead88d1424
+          name: 'Estado de UPS'
+          mappings:
+            - value: '1'
+              newvalue: DESCONOCIDO
+            - value: '2'
+              newvalue: ONLINE
+            - value: '3'
+              newvalue: 'EN BATERIA'
+            - value: '4'
+              newvalue: 'EN SMART BOOST'
+            - value: '5'
+              newvalue: 'REPOSO TEMPORIZADO'
+            - value: '6'
+              newvalue: 'BYPASS POR SOFTWARE'
+            - value: '7'
+              newvalue: APAGADO
+            - value: '8'
+              newvalue: REINICIANDO
+            - value: '9'
+              newvalue: 'BYPASS CONMUTADO'
+            - value: '10'
+              newvalue: 'BYPASS POR FALLA DE HARDWARE'
+            - value: '11'
+              newvalue: 'REPOSO HASTA RETORNO DE ENERGÍA'
+            - value: '12'
+              newvalue: 'EN SMART TRIM'
+            - value: '13'
+              newvalue: 'MODO ECO'
+            - value: '14'
+              newvalue: 'ESPERA EN CALIENTE'
+            - value: '15'
+              newvalue: 'PRUEBA DE BATERÍA'
+            - value: '16'
+              newvalue: 'BYPASS ESTÁTICO DE EMERGENCIA'
+            - value: '17'
+              newvalue: 'BYPASS ESTÁTICO EN ESPERA'
+            - value: '18'
+              newvalue: 'MODO AHORRO DE ENERGÍA'
+            - value: '19'
+              newvalue: 'MODO SPOT'
+            - value: '20'
+              newvalue: ECONVERSIÓN
+            - value: '21'
+              newvalue: 'MODO SPOT DEL CARGADOR'
+            - value: '22'
+              newvalue: 'MODO SPOT DEL INVERSOR'
+            - value: '23'
+              newvalue: 'CARGA ACTIVA'
+            - value: '24'
+              newvalue: 'MODO SPOT DE DESCARGA DE BATERÍA'
+            - value: '25'
+              newvalue: 'INVERSOR EN ESPERA'
+            - value: '26'
+              newvalue: 'SOLO CARGADOR'
+            - value: '27'
+              newvalue: 'RESERVA DE ENERGÍA DISTRIBUIDA'
+            - value: '28'
+              newvalue: AUTODIAGNÓSTICO

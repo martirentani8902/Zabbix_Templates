@@ -1,0 +1,1683 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: a769e91cdcb641aa9c49ef8037eb2f10
+      name: Templates/Generadores
+  templates:
+    - uuid: 5b135563c13e41daba25628928f670cc
+      template: 'Template ComAp IG200-18'
+      name: 'Template ComAp IG200-18'
+      groups:
+        - name: Templates/Generadores
+      items:
+        - uuid: 9047b22a5af249a7917d6f96b677b456
+          name: 'Combustible: Capacidad Restante (Litros)'
+          type: CALCULATED
+          key: comap.custom.fuel.capacityRemaining
+          units: L
+          params: 'last(//comap.custom.fuel.totalCapacity) * (last(//comap.groupRdCfg.vNivelCombustible) / 100)'
+        - uuid: 4a004f2a15c7426c8f60a736306a8512
+          name: 'Combustible: Capacidad Total (Litros)'
+          type: CALCULATED
+          key: comap.custom.fuel.totalCapacity
+          delay: '86400'
+          params: '{$FUEL_TOTAL_CAPACITY}'
+        - uuid: 2fb80b464bf44759a0b32c5e8ecb4b68
+          name: 'Combustible: Autonomia restante (Horas)'
+          type: CALCULATED
+          key: comap.custom.remainingAutonomy
+          units: h
+          params: 'last(//comap.custom.fuel.totalCapacity) / last(//comap.groupRdCfg.vFuelRate)'
+        - uuid: cf7521f3ff684ed2a9995b58b811f986
+          name: 'Motor: Carga (%)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vCarga
+          units: '%'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineLoad'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 028251f425fe4ff485a4f74004621d7a
+          name: 'Combustible: Consumo Total (Litros)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vConsumoTotalDeCombustible
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].fuelTotalConsumed'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: eb17bf8586034e1584c7834e1cf25b3b
+          name: 'Controlador: Temperatura Interna (°C)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vControladorTemp
+          value_type: FLOAT
+          units: C°
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].ctrlTemp'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 90be121b30ea4ac3807b0364f23db464
+          name: 'Gen: Corriente de Falla a Tierra (A)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vCorrienteDeFalloDeTierra
+          value_type: FLOAT
+          units: A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genCorrienteDeFalloDeTierra'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6c67a560131d4047bbdee74954ec9620
+          name: 'Gen: Corriente L1 (A)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vCorrienteGeneradorL1
+          units: A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genCorrL1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: d0467a4633334bcca90b2037c328e128
+          name: 'Gen: Corriente L2 (A)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vCorrienteGeneradorL2
+          units: A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genCorrL2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 2fa57801553a4147a309ff73fe653f75
+          name: 'Gen: Corriente L3 (A)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vCorrienteGeneradorL3
+          units: A
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genCorrL3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: cefa08859b624434a4f67a8060167b5e
+          name: 'Emisiones: Hollín DPF (%)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vDPF1Hollin
+          status: DISABLED
+          units: '%'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].dpfSoot'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 975b45b05dea473fb5c77b6f221e22a1
+          name: 'Estado: Entradas Binarias'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vEntradasBinarias
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].binaryInputs'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: d1025dde8be14d64a1f13787fbef3351
+          name: 'Gen: Factor de Potencia Total'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFactorDePotenciaDelGenerador
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genFP'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: ff8078ff78454bb386b8369092fcb2da
+          name: 'Gen: Factor de Potencia L1'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFactorDePotenciaDelGeneradorL1
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genFPL1'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 97896c95beab45348a4ccbb9c3717e8c
+          name: 'Gen: Factor de Potencia L2'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFactorDePotenciaDelGeneradorL2
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genFPL2'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 0d845247193743ffbf456bc67c1c524f
+          name: 'Gen: Factor de Potencia L3'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFactorDePotenciaDelGeneradorL3
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genFPL3'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: dcccc1f3dd964821aebbc5037867b505
+          name: 'Gen: Frecuencia (Hz)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFrecuenciaDelGenerador
+          value_type: FLOAT
+          units: Hz
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genFreq'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6c9ea1a9238942258a8a025362e5ed84
+          name: 'Red: Frecuencia (Hz)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFrecuenciaRedCHR2FBus
+          value_type: FLOAT
+          units: Hz
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busFreq'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: bf62c26901654f2db51c1423ee433bdf
+          name: 'Motor: Consumo de Combustible (L/h)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vFuelRate
+          value_type: FLOAT
+          units: L/h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineFuelRate'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 18286cb8221646a39cdc502ff755eb5f
+          name: 'Gen: Potencia Aparente Total (kVA)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVA
+          units: kVA
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVA'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 91c529a6326e4de3baa65eabc0e9bd03
+          name: 'Gen: Potencia Aparente L1 (kVA)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVAL1
+          units: kVA
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVAL1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: e5ad7c1b45aa40498b13dbf70dde1648
+          name: 'Gen: Potencia Aparente L2 (kVA)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVAL2
+          units: kVA
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVAL2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 62a2b0e3c2634001869e6fdf6cc17af4
+          name: 'Gen: Potencia Aparente L3 (kVA)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVAL3
+          units: kVA
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVAL3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6bdd3b167e4348ec9f6dd7b965a2aab2
+          name: 'Gen: Potencia Reactiva Total (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVAr
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVAr'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 1c37d2a1f1c843daaa25841e8d824ceb
+          name: 'Gen: Potencia Reactiva L1 (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVArL1
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVArL1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 156faa70a72b498d8d905d8362e2a899
+          name: 'Gen: Potencia Reactiva L2 (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVArL2
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVArL2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 3861b82b9bc14e1b96b82c9cc52fbc01
+          name: 'Gen: Potencia Reactiva L3 (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKVArL3
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVArL3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: cfcd74626e004f41832575d464cdd6f9
+          name: 'Gen: Potencia Activa Total (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKW
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKW'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 74bb8f106b514ba68213a8deb2c67f52
+          name: 'Gen: Potencia Activa L1 (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKWL1
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKWL1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: cc10c48762c24b08825faaf9a2625158
+          name: 'Gen: Potencia Activa L2 (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKWL2
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKWL2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6bda027b53d9449abab245c19273c307
+          name: 'Gen: Potencia Activa L3 (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGeneradorKWL3
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKWL3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: da5356f274f941be8beaa9e1e5e96606
+          name: 'Gen: Energía Reactiva Acumulada (kVArh)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGrupoKVArh
+          units: kVArh
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKVArh'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: d636beff9f624517b0b2187623d24224
+          name: 'Gen: Energía Activa Acumulada (kWh)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vGrupoKWh
+          units: Wh
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genKWh'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6dca10591b214148aad668c49ecbe4ce
+          name: 'Estadísticas: Horas en Ejecucion (h)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vHorasEnEjecucion
+          value_type: FLOAT
+          units: h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].runHours'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 7f3bee26352044f58e7fc2fbc2b6be09
+          name: 'Red: Importacion Potencia Reactiva (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vImportacionRedKVAr
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busImportKVAr'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: ba298d8b24164fd99310ee69e3ac970f
+          name: 'Red: Importacion Potencia Activa (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vImportacionRedKW
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busImportKW'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 609556edca3048ee8b80a0e97b837236
+          name: 'Mantenimiento: Temporizador 1 (h)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vMantenimiento1
+          units: h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].maint1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: e92c9975635a4aa8a9c41a27eb9541d9
+          name: 'Mantenimiento: Temporizador 2 (h)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vMantenimiento2
+          units: h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].maint2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 238ab18b916148d39e14ec7c05a5831d
+          name: 'Mantenimiento: Temporizador 3 (h)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vMantenimiento3
+          units: h
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].maint3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 3d1faff5e5044ef386214a6dd4b1ebb8
+          name: 'Controlador: Modo de Operación'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vModoDelControlador
+          valuemap:
+            name: 'Modo Controlador'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].ctrlMode'
+          master_item:
+            key: comap.walk.groupRdCfg
+          triggers:
+            - uuid: 44bf431924574cc4b6365e85517fb021
+              expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=0'
+              name: 'Generador en modo APAGADO'
+              priority: HIGH
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: d96359919d954fc0b7b6f0566015a917
+              expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=1'
+              name: 'Generador en modo MANUAL'
+              priority: AVERAGE
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 029366ea3a124206a1d53d3863879fa5
+              expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=3'
+              name: 'Generador en modo TEST'
+              priority: INFO
+        - uuid: 6e840b8b9f614e26bfca158c09018488
+          name: 'Combustible: Nivel del Tanque (%)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vNivelCombustible
+          value_type: FLOAT
+          units: '%'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].fuelLevel'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+          triggers:
+            - uuid: 712bca72bcd348c9bbe2d11377c11c58
+              expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vNivelCombustible)<=10'
+              name: 'Motor apagado - Nivel de combustible menor o igual al 10%'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 31381d5874b4401aa6b193117ed98010
+              expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vNivelCombustible)<50'
+              name: 'Nivel de combustible menor o igual al 50%'
+              priority: HIGH
+        - uuid: 8e63fdc9ae4440cfba0ccbd7424c30aa
+          name: 'Emisiones: Nivel DEF (%)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vNivelDEF
+          status: DISABLED
+          units: '%'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].defLevel'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 231332de948544a5bcda5112dbb5de7c
+          name: 'Estadísticas: Cantidad de Arranques'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vNumStarts
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].numStarts'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: ffcc0deb9c3b4d998039aad9c40aea08
+          name: 'Regulación: Potencia Activa Requerida (kW)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vPotenciaActivaRequerida
+          units: kW
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].reqActivePower'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: ad437c3888c544e69cc12016ca127a4e
+          name: 'Regulación: Potencia Reactiva Requerida (kVAr)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vPotenciaReactivaRequerida
+          units: kVAr
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].reqReactivePower'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 20f9e97dafa043c58e2a267d89278ee0
+          name: 'Motor: Presion de aceite (bar)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vPresionAceite
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineOilPressure'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: b38cde9cd3664b10a88ee3b0b2f4adea
+          name: 'Motor: Presion de admision del motor (bar)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vPresionMultipleAdmision
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineIntakePressure'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: c0d2a514f7ec4ef39cc250e58404251e
+          name: 'Red: Voltaje L1-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vRedCHR2FBusVoltajeL1N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL1N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 9090d073ae044002b1ac9493c17c1fdf
+          name: 'Red: Voltaje L2-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vRedCHR2FBusVoltajeL2N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL2N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 0067f655618d4d39bbc1f5efcee675cf
+          name: 'Red: Voltaje L3-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vRedCHR2FBusVoltajeL3N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL3N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: c8de91093d67427eb2cb955ef0bf8b28
+          name: 'Red: Factor de Potencia'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vRedFP
+          value_type: FLOAT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busFP'
+            - type: MULTIPLIER
+              parameters:
+                - '0.01'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: a9df4572be9a4f028b56f5ca0ab39ee7
+          name: 'Motor: RPM (controlador)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vRPM
+          units: RPM
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineRPM'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 092eb3f53eb84561b2703d59ffd733bf
+          name: 'Regulación: Salida Gobernador de Velocidad (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vSalidaGobernadorVelocidad
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].govOutput'
+            - type: MULTIPLIER
+              parameters:
+                - '0.001'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 1068fe80eead4a0c8a364472f1d2ef12
+          name: 'Regulación: Salida Regulador de Tensión (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vSalidaReguladorDeTension
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].avrOutput'
+            - type: MULTIPLIER
+              parameters:
+                - '0.001'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: f59b6325aba946b8af35bb0203280823
+          name: 'Estado: Salidas Binarias'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vSalidasBinarias
+          value_type: TEXT
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].binaryOutputs'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 3513f9ee2abd481ca7f5cc85fe3f14a2
+          name: 'Regulación: Solicitud de Tensión (%)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vSolicitudDeTension
+          value_type: FLOAT
+          units: '%'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].voltRequest'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: c06343e1e14c4a2bbd20a7b2e1f1dba4
+          name: 'Motor: Temperatura Refrigerante (°C)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vTCoolant
+          units: C°
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineCoolantTemp'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 29bafae653dd4dc7a31d92fb8f0b5562
+          name: 'Motor: Temperatura de admision del motor (C°)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vTemperaturaMultipleAdmision
+          units: C°
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].engineIntManifoldTemp'
+            - type: JAVASCRIPT
+              parameters:
+                - 'var v = parseInt(value, 10);if (v === -32768 || v === -2147483648) { throw ''N/A''; }return value;'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 57050dce9cad4ae68f035ff26d20a3eb
+          name: 'Gen: Voltaje L1-L2 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL1L2
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL1L2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 3129db02a0744c7782a4c7ce1f8b4855
+          name: 'Gen: Voltaje L1-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL1N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL1N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 76dbd35eac3d4d169ba02e38ed92708f
+          name: 'Gen: Voltaje L2-L3 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL2L3
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL2L3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 629dfc9b26984c389a8c78e0c53e0112
+          name: 'Gen: Voltaje L2-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL2N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL2N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 0d3093e1f8e14c68b51410fd61b942aa
+          name: 'Gen: Voltaje L3-L1 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL3L1
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL3L1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 5168a1cdc6a64e6b833d7e948d6ff414
+          name: 'Gen: Voltaje L3-N (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeGeneradorL3N
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].genVoltL3N'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 6ebca52b947f43599b79dc4201848751
+          name: 'Bateria: Voltaje (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeLaBateria
+          value_type: FLOAT
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].battVolt'
+            - type: MULTIPLIER
+              parameters:
+                - '0.1'
+          master_item:
+            key: comap.walk.groupRdCfg
+          triggers:
+            - uuid: 96f7156483a24edbbd01b8e675b5e266
+              expression: 'max(/Template ComAp IG200-18/comap.groupRdCfg.vVoltajeDeLaBateria,10m)<{$BATTERY_VOLTAGE_CRT}'
+              name: 'VOLTAJE DE BATERIA MENOR A {$BATTERY_VOLTAGE_CRT}V HACE 10 MINUTOS'
+              priority: DISASTER
+              tags:
+                - tag: alarma_sonora
+                  value: si
+            - uuid: 24e55f07e2fa4a3ea273cb18d2a18693
+              expression: 'max(/Template ComAp IG200-18/comap.groupRdCfg.vVoltajeDeLaBateria,10m)<{$BATTERY_VOLTAGE_WRN}'
+              name: 'VOLTAJE DE BATERIA MENOR A {$BATTERY_VOLTAGE_WRN}V HACE 10 MINUTOS'
+              priority: HIGH
+        - uuid: 88350ba2447a4dff8cd695a9656dc19a
+          name: 'Red: Voltaje L1-L2 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeRedCHR2FBusL1L2
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL1L2'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 621fe57e60544fedad3668e724bb8ceb
+          name: 'Red: Voltaje L2-L3 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeRedCHR2FBusL2L3
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL2L3'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: 10247418f6524cd0921384b78cbc34b0
+          name: 'Red: Voltaje L3-L1 (V)'
+          type: DEPENDENT
+          key: comap.groupRdCfg.vVoltajeDeRedCHR2FBusL3L1
+          units: V
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[0].busVoltL3L1'
+          master_item:
+            key: comap.walk.groupRdCfg
+        - uuid: de3005cff7ba444686adf9e37553901e
+          name: 'ComAp IG200-18: bulk walk'
+          type: SNMP_AGENT
+          snmp_oid: 'walk[1.3.6.1.4.1.28634.18.2]'
+          key: comap.walk.groupRdCfg
+          value_type: TEXT
+          preprocessing:
+            - type: SNMP_WALK_TO_JSON
+              parameters:
+                - genVoltL1N
+                - 1.3.6.1.4.1.28634.18.2.8192
+                - '0'
+                - genVoltL2N
+                - 1.3.6.1.4.1.28634.18.2.8193
+                - '0'
+                - genVoltL3N
+                - 1.3.6.1.4.1.28634.18.2.8194
+                - '0'
+                - genVoltL1L2
+                - 1.3.6.1.4.1.28634.18.2.9628
+                - '0'
+                - genVoltL2L3
+                - 1.3.6.1.4.1.28634.18.2.9629
+                - '0'
+                - genVoltL3L1
+                - 1.3.6.1.4.1.28634.18.2.9630
+                - '0'
+                - genCorrL1
+                - 1.3.6.1.4.1.28634.18.2.8198
+                - '0'
+                - genCorrL2
+                - 1.3.6.1.4.1.28634.18.2.8199
+                - '0'
+                - genCorrL3
+                - 1.3.6.1.4.1.28634.18.2.8200
+                - '0'
+                - genFreq
+                - 1.3.6.1.4.1.28634.18.2.8210
+                - '0'
+                - genKW
+                - 1.3.6.1.4.1.28634.18.2.8202
+                - '0'
+                - genKWL1
+                - 1.3.6.1.4.1.28634.18.2.8524
+                - '0'
+                - genKWL2
+                - 1.3.6.1.4.1.28634.18.2.8525
+                - '0'
+                - genKWL3
+                - 1.3.6.1.4.1.28634.18.2.8526
+                - '0'
+                - genKVAr
+                - 1.3.6.1.4.1.28634.18.2.8203
+                - '0'
+                - genKVArL1
+                - 1.3.6.1.4.1.28634.18.2.8527
+                - '0'
+                - genKVArL2
+                - 1.3.6.1.4.1.28634.18.2.8528
+                - '0'
+                - genKVArL3
+                - 1.3.6.1.4.1.28634.18.2.8529
+                - '0'
+                - genKVA
+                - 1.3.6.1.4.1.28634.18.2.8565
+                - '0'
+                - genKVAL1
+                - 1.3.6.1.4.1.28634.18.2.8530
+                - '0'
+                - genKVAL2
+                - 1.3.6.1.4.1.28634.18.2.8531
+                - '0'
+                - genKVAL3
+                - 1.3.6.1.4.1.28634.18.2.8532
+                - '0'
+                - genFP
+                - 1.3.6.1.4.1.28634.18.2.8204
+                - '0'
+                - genFPL1
+                - 1.3.6.1.4.1.28634.18.2.8533
+                - '0'
+                - genFPL2
+                - 1.3.6.1.4.1.28634.18.2.8534
+                - '0'
+                - genFPL3
+                - 1.3.6.1.4.1.28634.18.2.8535
+                - '0'
+                - genKWh
+                - 1.3.6.1.4.1.28634.18.2.8205
+                - '0'
+                - genKVArh
+                - 1.3.6.1.4.1.28634.18.2.8539
+                - '0'
+                - genCorrienteDeFalloDeTierra
+                - 1.3.6.1.4.1.28634.18.2.14325
+                - '0'
+                - busVoltL1N
+                - 1.3.6.1.4.1.28634.18.2.8195
+                - '0'
+                - busVoltL2N
+                - 1.3.6.1.4.1.28634.18.2.8196
+                - '0'
+                - busVoltL3N
+                - 1.3.6.1.4.1.28634.18.2.8197
+                - '0'
+                - busVoltL1L2
+                - 1.3.6.1.4.1.28634.18.2.9631
+                - '0'
+                - busVoltL2L3
+                - 1.3.6.1.4.1.28634.18.2.9632
+                - '0'
+                - busVoltL3L1
+                - 1.3.6.1.4.1.28634.18.2.9633
+                - '0'
+                - busFreq
+                - 1.3.6.1.4.1.28634.18.2.8211
+                - '0'
+                - busImportKW
+                - 1.3.6.1.4.1.28634.18.2.8703
+                - '0'
+                - busImportKVAr
+                - 1.3.6.1.4.1.28634.18.2.8704
+                - '0'
+                - busFP
+                - 1.3.6.1.4.1.28634.18.2.8705
+                - '0'
+                - engineRPM
+                - 1.3.6.1.4.1.28634.18.2.10123
+                - '0'
+                - engineCoolantTemp
+                - 1.3.6.1.4.1.28634.18.2.10155
+                - '0'
+                - engineFuelRate
+                - 1.3.6.1.4.1.28634.18.2.10154
+                - '0'
+                - engineLoad
+                - 1.3.6.1.4.1.28634.18.2.10159
+                - '0'
+                - fuelLevel
+                - 1.3.6.1.4.1.28634.18.2.9153
+                - '0'
+                - fuelTotalConsumed
+                - 1.3.6.1.4.1.28634.18.2.9040
+                - '0'
+                - battVolt
+                - 1.3.6.1.4.1.28634.18.2.8213
+                - '0'
+                - ctrlMode
+                - 1.3.6.1.4.1.28634.18.2.9887
+                - '0'
+                - ctrlTemp
+                - 1.3.6.1.4.1.28634.18.2.10124
+                - '0'
+                - runHours
+                - 1.3.6.1.4.1.28634.18.2.8206
+                - '0'
+                - numStarts
+                - 1.3.6.1.4.1.28634.18.2.8207
+                - '0'
+                - maint1
+                - 1.3.6.1.4.1.28634.18.2.11616
+                - '0'
+                - maint2
+                - 1.3.6.1.4.1.28634.18.2.11617
+                - '0'
+                - maint3
+                - 1.3.6.1.4.1.28634.18.2.11618
+                - '0'
+                - govOutput
+                - 1.3.6.1.4.1.28634.18.2.9052
+                - '0'
+                - avrOutput
+                - 1.3.6.1.4.1.28634.18.2.9053
+                - '0'
+                - reqActivePower
+                - 1.3.6.1.4.1.28634.18.2.8663
+                - '0'
+                - reqReactivePower
+                - 1.3.6.1.4.1.28634.18.2.12877
+                - '0'
+                - voltRequest
+                - 1.3.6.1.4.1.28634.18.2.14997
+                - '0'
+                - defLevel
+                - 1.3.6.1.4.1.28634.18.2.14522
+                - '0'
+                - dpfSoot
+                - 1.3.6.1.4.1.28634.18.2.15765
+                - '0'
+                - binaryInputs
+                - 1.3.6.1.4.1.28634.18.2.8235
+                - '0'
+                - binaryOutputs
+                - 1.3.6.1.4.1.28634.18.2.8239
+                - '0'
+                - engineOilPressure
+                - 1.3.6.1.4.1.28634.18.2.10157
+                - '0'
+                - engineIntManifoldTemp
+                - 1.3.6.1.4.1.28634.18.2.10156
+                - '0'
+                - engineIntakePressure
+                - 1.3.6.1.4.1.28634.18.2.10158
+                - '0'
+        - uuid: 4551cf0e6b234795b1c7a6a99bc8db99
+          name: tALPresiónAceitSDL1Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.8389184"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de advertencia de baja presión de aceite'
+          triggers:
+            - uuid: 25f7a993bfbb4aa3bbc81858e99d7079
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.8389184"])<>"\"\""'
+              name: 'Baja presion de aceite del motor (menor a {$OIL_PRESS_LOW_WRN} bar) (RECONOCER)'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: a40f87ad6351413b8a93079c40136e9b
+          name: tALPresiónAceitSDL1Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.8389185"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de advertencia de baja presión de aceite'
+        - uuid: 47a18d1dc3884ca99892088e30fd1b3f
+          name: tALTempRefrigSDL1Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.8389192"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de advertencia de alta temperatura del refrigerante'
+          triggers:
+            - uuid: 9e2d7c90bbe34bd0b585165568ba8247
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.8389192"])<>"\"\""'
+              name: 'Alta temperatura del refrigerante del motor (mayor a {$COOLANT_TEMP_HIGH_WRN} C°) (RECONOCER)'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: 3fd12546b449473f8c2ee29f6c360d1c
+          name: tALTempRefrigSDL1Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.8389193"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de advertencia de alta temperatura del refrigerante'
+        - uuid: b14c15e9e43b401d9d2799dbc91c4b14
+          name: tALPresiónAceitSDL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.142606912"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del motor por baja presión de aceite'
+          triggers:
+            - uuid: e013533471504822ad6c7236a0cd212b
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.142606912"])<>"\"\""'
+              name: 'Motor apagado - Baja presion de aceite del motor (menor a {$OIL_PRESS_LOW_SD} bar) (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 086c48bfd70d42da884e418bef0c2f71
+          name: tALPresiónAceitSDL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.142606913"]'
+          value_type: TEXT
+          description: 'Desaparición de alerta de apagado del motor por baja presión de aceite'
+        - uuid: 868cf57975f74afbb1cf4fd9f781a8b1
+          name: tALTempRefrigSDL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.142606920"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del motor por alta temperatura del refrigerante'
+          triggers:
+            - uuid: 150a2413f0eb4c959e569b846118e176
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.142606920"])="\"\""'
+              name: 'Motor apagado - Alta temperatura del refrigerante del motor (mayor a {$COOLANT_TEMP_HIGH_SD} C°) (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 09e6ce917eab4ab5859018cdb1d76a54
+          name: tALTempRefrigSDL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.142606921"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apagado del motor por alta temperatura del refrigerante'
+        - uuid: 67a5083e868546cda4ff6252abfe8c61
+          name: tSDBateríaDescargadaL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383760"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de baterias descargadas'
+          triggers:
+            - uuid: 3819a936fe3d45c4907b1b60f3a48362
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159383760"])<>"\"\""'
+              name: 'Motor apagado - Batería descargada (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: d8f64afb37864a368b9160a8d070b102
+          name: tSDBateríaDescargadaL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383761"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de baterias descargadas'
+        - uuid: 3d49250193444cc583739afe43af7227
+          name: tSDFalloGCBL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383916"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de fallo del disyuntor principal'
+          triggers:
+            - uuid: df5b867e17b046e28f9651ad60627a1b
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159383916"])<>"\"\""'
+              name: 'Motor apagado - Fallo al operar el disyuntor principal del generador (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 7884c66051564a5a94a5ac40480dd703
+          name: tSDFalloGCBL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383917"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de fallo del disyuntor principal'
+        - uuid: cdb57b3a83dc4c42a52f499d463aeb91
+          name: tParadaFalloDeSincronizaciónL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383928"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por falla de sincronizacion con la red'
+          triggers:
+            - uuid: c01ed9b37da34b75a3ee31c66ed3c080
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159383928"])<>"\"\""'
+              name: 'Motor apagado - Falla de sincronizacion con la red (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: bcdc752f52024708bb83706053fa5428
+          name: tParadaFalloDeSincronizaciónL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383929"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apagado del generador por falla de sincronizacion con la red'
+        - uuid: 55596b8cd9624238839a6858747aadad
+          name: tGeneradorL1LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383932"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 1 y neutro'
+        - uuid: 56c3c76e360143d4a90f76d374878b4f
+          name: tGeneradorL2LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383936"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 2 y neutro'
+        - uuid: 54591b17952c4dae8d93efd609dfea11
+          name: tGeneradorL3LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383940"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 3 y neutro'
+        - uuid: 5597b814a6054fc7b5c8161733339122
+          name: tGeneradorL1GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383944"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 1 y neutro'
+        - uuid: 64c7c7d11e8940f9a07a1e7b79b69fc4
+          name: tGeneradorL2GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383948"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 2 y neutro'
+        - uuid: 6cdc3aaaeeb341e9a326bac94d9109eb
+          name: tGeneradorL3GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383952"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 3 y neutro'
+        - uuid: fdc3d536dd7c471cb260ebd357660337
+          name: tGeneradorL1L2LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383968"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 1 y fase 2'
+        - uuid: be2c1eab39ed446dab40b372f2be34c4
+          name: tGeneradorL2L3LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383972"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 2 y fase 3'
+        - uuid: 40e77e247580423c962b4725693c9860
+          name: tGeneradorL3L1LtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383976"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por bajo voltaje entre fase 3 y fase 1'
+        - uuid: 1a4b854eabfb421581e9e7ec73a418ce
+          name: tGeneradorL1L2GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383980"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 1 y fase 2'
+        - uuid: ac5a5a0e50b44216840881ff39ba8e51
+          name: tGeneradorL2L3GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383984"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 2 y fase 3'
+        - uuid: cf585505130c4577a24d264b3c6ea66c
+          name: tGeneradorL3L1GtVoltajeL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159383988"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevoltaje entre fase 3 y fase 1'
+        - uuid: 442c2c3b1d054d0fae682ac331524a32
+          name: tGeneradorLtFrecuenciaL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159384032"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por baja frecuencia'
+        - uuid: 4aca709f631a4917b29b1b8b4c3d7e18
+          name: tGeneradorGtFrecuenciaL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159384036"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por alta frecuencia'
+        - uuid: fc014a229b484826899b75f8b3be4bc3
+          name: tParadaErrorDeMedVoltBarraL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159384124"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por error de medicion de voltaje de la barra'
+          triggers:
+            - uuid: 1795047439cb491b84374506c60cf9dc
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159384124"])<>"\"\""'
+              name: 'Motor apagado - Error de medicion de voltaje de barra (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: b2d9936bd93c4644b2337557b05d3777
+          name: tParadaErrorDeMedVoltBarraL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159384125"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apagado del generador por error de medicion de voltaje de la barra'
+        - uuid: 82e08114ea364a3aa038c602ce3d39f0
+          name: tBOCDesbalanceGenVoltLLL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385904"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por desbalance de tension entre fases'
+          triggers:
+            - uuid: a683f040e1434748af618137b97a568c
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159385904"])<>"\"\""'
+              name: 'Disyuntor abierto - Desbalance de tensión entre fases (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 4127cc809a3346d1b6af8c5733e1570a
+          name: tBOCDesbalanceGenVoltLLL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385905"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apertura del disyuntor por desbalance de tension entre fases'
+        - uuid: 15493ea4eb6b44d591c2d7f4cba997f4
+          name: tBOCDesbalanceGenVoltLNL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385908"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por desbalance de tension entre fase y neutro'
+          triggers:
+            - uuid: f72fad1ef2ea489f888f663708c4b15e
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159385908"])<>"\"\""'
+              name: 'Disyuntor abierto - Desbalance de tensión entre fase y neutro (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: f0e48326eb7a4191a6395bbc2651db46
+          name: tBOCDesbalanceGenVoltLNL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385909"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apertura del disyuntor por desbalance de tension entre fase y neutro'
+        - uuid: 669e75fc814e4998b2d530f578425f1c
+          name: tCortocircuitoL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385932"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por cortocircuito'
+          triggers:
+            - uuid: e231f06d55c64644bb848eb5d26b8d4d
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159385932"])<>"\"\""'
+              name: 'Motor apagado - Cortocircuito (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 0573e43aa90b4d20809111fa81ee659a
+          name: tCortocircuitoL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385933"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por cortocircuito'
+        - uuid: 4cc37833c96f45878843f4dcb89359fb
+          name: tSDCorrienteFalloTierraL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385936"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de corriente de fallo a tierra'
+          triggers:
+            - uuid: 5effd6ff859540319812f51c9a065c67
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159385936"])<>"\"\""'
+              name: 'Motor apagado - Corriente de fallo a tierra (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: fd3fbfd1ba37451d847d28b9c7211852
+          name: tSDCorrienteFalloTierraL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385937"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de corriente de fallo a tierra'
+        - uuid: 286ffdaa2a084115b97b95e7c5306048
+          name: tBOCSobrecorrienteIDMTL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385940"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por sobrecorriente IDMT'
+          triggers:
+            - uuid: f31eed653d254df7b59b470fb9087de4
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159385940"])<>"\"\""'
+              name: 'Disyuntor abierto - Sobrecorriente sostenida detectada (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 7f38addb9108451aa8ac8e9ca0241918
+          name: tBOCSobrecorrienteIDMTL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159385941"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apertura del disyuntor por sobrecorriente IDMT'
+        - uuid: 03d39c0b06864d5a888182fd389d3933
+          name: tBOCPotenciaInversaL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386932"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por flujo de potencia invertido'
+          triggers:
+            - uuid: 5d30ce90532a43c9855b95b05fe166dd
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159386932"])<>"\"\""'
+              name: 'Disyuntor abierto - Potencia inversa detectada (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 451be54d4dcd464cbe5edb8213cbbeed
+          name: tBOCPotenciaInversaL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386933"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apertura del disyuntor por flujo de potencia invertido'
+        - uuid: 1994185452f844f180969aa40e5098da
+          name: tBOCPérdidaDeExcitaciónL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386936"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por perdida de excitacion del alternador'
+          triggers:
+            - uuid: e6f574f74a68407ca0c9f70f5f9cc665
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159386936"])<>"\"\""'
+              name: 'Disyuntor abierto - Pérdida de excitación del alternador (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 5e8766d381cc4cb8a348779c9ca87b1a
+          name: tBOCPérdidaDeExcitaciónL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386937"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de apertura del disyuntor por perdida de excitacion del alternador'
+        - uuid: 070b8b03778c42c0996981fba5b17ddd
+          name: tESTOPL2Activated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386964"]'
+          value_type: TEXT
+          description: 'Activacion de alerta por activacion de parada de emergencia'
+          triggers:
+            - uuid: b2fb325d2a574198991932cadb7dd5e8
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159386964"])<>"\"\""'
+              recovery_mode: NONE
+              name: 'Parada de emergencia activada (RECONOCER)'
+              priority: WARNING
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 0bead5ff36b241799ab30c8fb8818807
+          name: tESTOPL2Disappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.159386965"]'
+          value_type: TEXT
+          description: 'Activacion de alerta por desactivacion de parada de emergencia'
+          triggers:
+            - uuid: a15bba01be734b379780e04a9bc12713
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.159386965"])<>"\"\""'
+              recovery_mode: NONE
+              name: 'Parada de emergencia desactivada (RECONOCER)'
+              priority: INFO
+              manual_close: 'YES'
+        - uuid: 3036f14872dc426893765bb52d98e0dc
+          name: tALPresiónAceitSDSFActivated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.276824640"]'
+          value_type: TEXT
+          description: 'Activación de alerta de fallo del sensor de presión de aceite'
+          triggers:
+            - uuid: fd0b87fe67104d948c82ae1eba671c15
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.276824640"])<>"\"\""'
+              name: 'Fallo del sensor de presion de aceite del motor (RECONOCER)'
+              priority: WARNING
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 892a127cd42649e8b11bcf9795fe6a3f
+          name: tALPresiónAceitSDSFDisappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.276824641"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de fallo del sensor de presión de aceite'
+        - uuid: 746ee11a804846a292e51b33de3f0748
+          name: tALTempRefrigSDSFActivated
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.276824648"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de fallo de sensor de temperatura del refrigerante'
+          triggers:
+            - uuid: e18fcadc904b4f38b7dc3da86b239086
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.276824648"])<>"\"\""'
+              name: 'Fallo del sensor de temperatura de refrigerante del motor (RECONOCER)'
+              priority: WARNING
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 5e01d80476ae4183b71f58abaa89b62c
+          name: tALTempRefrigSDSFDisappeared
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.276824649"]'
+          value_type: TEXT
+          description: 'Desaparicion de alerta de fallo de sensor de temperatura del refrigerante'
+        - uuid: 13ecf058c51f49dab3183901e77d610a
+          name: tSobreVelocidadSD
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742023"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por sobrevelocidad del motor'
+          triggers:
+            - uuid: c7a358cfb8294102a06fc2b6e6810ca8
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742023"])<>"\"\""'
+              name: 'Motor apagado - Sobrevelocidad del motor (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 85ea8126fd204fbf9bd3fccbbf3bb371
+          name: tBajaVelocidadSD
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742024"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apagado del generador por baja velocidad del motor'
+          triggers:
+            - uuid: aa2868692f374ce2863c91f0bc2e1795
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742024"])<>"\"\""'
+              name: 'Motor apagado - Baja velocidad del motor (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: 2559744378b84b119a55e9c55f2df4c7
+          name: tSDFalloIOM
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742025"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de fallo de modulo de entrada y salida'
+          triggers:
+            - uuid: 33d8478c95184e0694ebc118567efa92
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742025"])<>"\"\""'
+              name: 'Fallo en módulo IOM - Protección del motor comprometida (RECONOCER)'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: d1a5dda6afcf41bd81662e371f77f49e
+          name: tSDFallóMediciónDeRPM
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742026"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de fallo de medicion de RPMs'
+          triggers:
+            - uuid: f04d1ff8f6744f5d9ab55437a4b64531
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742026"])<>"\"\""'
+              name: 'Fallo en medición de RPM - Protección del motor comprometida (RECONOCER)'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: c56c0aaf8e954442a4a3c07f396687c4
+          name: tSDFallóArranque
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742028"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de fallo de arranque del generador'
+          triggers:
+            - uuid: 37336fbba23843df861a48eaf9f6e1dc
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742028"])<>"\"\""'
+              name: 'Motor apagado - Falló el arranque (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+        - uuid: e0a8f0cd53dd41d4bba12d375093fd1c
+          name: tBOCFalloNCB
+          type: SNMP_TRAP
+          key: 'snmptrap["enterprises\.28634\.18\.0\.1073742224"]'
+          value_type: TEXT
+          description: 'Activacion de alerta de apertura del disyuntor por fallo en el disyuntor del neutro'
+          triggers:
+            - uuid: bed9b3cfce474d06a891953ae3e0b72d
+              expression: 'last(/Template ComAp IG200-18/snmptrap["enterprises\.28634\.18\.0\.1073742224"])<>"\"\""'
+              name: 'Disyuntor abierto - Fallo al operar el contactor de neutro (RECONOCER)'
+              priority: DISASTER
+              manual_close: 'YES'
+              tags:
+                - tag: alarma_sonora
+                  value: si
+      macros:
+        - macro: '{$BATTERY_VOLTAGE_CRT}'
+          value: '22'
+        - macro: '{$BATTERY_VOLTAGE_WRN}'
+          value: '25.4'
+        - macro: '{$COOLANT_TEMP_HIGH_SD}'
+          value: '110'
+        - macro: '{$COOLANT_TEMP_HIGH_WRN}'
+          value: '104'
+        - macro: '{$OIL_PRESS_LOW_SD}'
+          value: '1'
+        - macro: '{$OIL_PRESS_LOW_WRN}'
+          value: '2'
+        - macro: '{$SNMP_COMMUNITY}'
+          value: public
+      valuemaps:
+        - uuid: 64f44d21bb024edeb854151d8c28f60c
+          name: 'Modo Controlador'
+          mappings:
+            - value: '0'
+              newvalue: 'OFF'
+            - value: '1'
+              newvalue: MAN
+            - value: '2'
+              newvalue: AUTO
+            - value: '3'
+              newvalue: TEST
+  triggers:
+    - uuid: abfeaefadb8444df8d55041e0607c740
+      expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=2 and (last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL1N)<140 or last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL2N)<140 or last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL3N)<140) and last(/Template ComAp IG200-18/comap.groupRdCfg.vRPM)>0'
+      name: 'Generador en servicio por corte de energia'
+      priority: HIGH
+      tags:
+        - tag: alarma_sonora
+          value: si
+    - uuid: 280f645ae15c4f848c9ffec73df9e6c2
+      expression: '(last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=1 or last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=3) and last(/Template ComAp IG200-18/comap.groupRdCfg.vRPM)>0'
+      name: 'Generador en servicio por TEST o MANUAL'
+      priority: INFO
+    - uuid: dd71c12ae9e84074be381b3b9410c022
+      expression: 'last(/Template ComAp IG200-18/comap.groupRdCfg.vModoDelControlador)=2 and (last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL1N)<140 or last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL2N)<140 or last(/Template ComAp IG200-18/comap.groupRdCfg.vRedCHR2FBusVoltajeL3N)<140) and last(/Template ComAp IG200-18/comap.groupRdCfg.vRPM)=0'
+      name: 'Generador no arranco con corte de energia'
+      priority: DISASTER
+      tags:
+        - tag: alarma_sonora
+          value: si
